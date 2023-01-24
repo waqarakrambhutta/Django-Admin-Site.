@@ -54,9 +54,7 @@ class Customer(models.Model):
 
     def __str__(self) -> str:
         return self.first_name
-    
-    class Meta:
-        ordering = ['first_name']
+
 
 class Order(models.Model):
     PAYMENT_STATUS_PENDING = 'P'
