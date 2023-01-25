@@ -23,6 +23,8 @@ class OrderAdmin(admin.ModelAdmin):
         return new_id + 1
 
 admin.site.register(models.Collection)
+
+
 # admin.site.register(models.Order,OrderAdmin)
 # admin.site.register(models.Product,ProductAdmin)
 
