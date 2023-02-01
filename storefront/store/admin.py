@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin,messages
 from . import models
 
 
@@ -37,11 +37,27 @@ class ProductAdmin(admin.ModelAdmin):
         
     
     
-    # @admin.action(description='Clear Inventory')    
-    # def inventory_action(self, request, queryset):
-    #     update_count = queryset.update(inventory=0)
-    #     self.message_user(
-    #         request,
-    #         f'{update_count} products were sucessfully updated.',
-    #         messages.ERROR
-    #     )
+    @admin.action(description='Clear Inventory')    
+    def inventory_action(self, request, queryset):
+        update_count = queryset.update(inventory=0)
+        self.message_user(
+            request,
+            f'{update_count} products were sucessfully updated.',
+            messages.ERROR
+        )
+
+
+@admin.register(models.Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display =['phone','membership']
+    list_per_page = 10
+    actions = ['membership_action']
+
+    @admin.action(description='Finish the membership')    
+    def membership_action(self, request, queryset):
+        items = queryset.update(membership='_')
+        self.message_user(
+            request,
+            f'{items} fields formated successfully.'
+        )
+        
