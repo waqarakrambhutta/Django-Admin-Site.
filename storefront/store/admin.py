@@ -1,24 +1,35 @@
 from django.contrib import admin
-from django.db.models import Count
 from . import models
-from django.urls import reverse
-from django.utils.html import format_html
 
 
-@admin.register(models.Customer)
-class CustomerAdmin(admin.ModelAdmin):
-    list_display =  ['email','phone','order_count']
-    list_per_page = 10
+class InventoryFilter(admin.SimpleListFilter):
+    title = 'Inventory'
+    parameter_name = 'Inventory'
 
-	
-    @admin.display(ordering='order_count')
-    def order_count(self,cart):
-        url = reverse('admin:store_customer_changelist')
-        return format_html('<a href="http://www.google.com">{}</a>',cart.order_count)
+    def lookups(self, request, model_admin):
+        return [
+            ('<10','Low'),('>10 and <50', 'Ok'),('>50','High')
+        ]
     
+    def queryset(self, request, queryset):
+        if self.value() == '<10':
+            return queryset.filter(inventory__lte=10)
+        elif self.value() == '>50':
+            return queryset.filter(inventory__gt=10)
+        elif self.value() == '>10 and <50':
+            return queryset.filter(inventory__range=(11,49))   
 
-    def get_queryset(self,request):
-        return super().get_queryset(request).annotate(
-            order_count = Count('phone')
-                                  
-        )
+@admin.register(models.Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['title','inventory','Inventory_status']
+    list_filter= [InventoryFilter]
+    list_per_page = 10
+    search_fields = ['inventory__contains']
+
+    def Inventory_status(self,separate):
+        if separate.inventory <= 10:
+            return 'Low'
+        elif separate.inventory >=50:
+            return 'High'
+        else:
+            return 'Ok'
