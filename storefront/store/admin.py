@@ -21,6 +21,7 @@ class InventoryFilter(admin.SimpleListFilter):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    actions = ['inventory_action']
     list_display = ['title','inventory','Inventory_status']
     list_filter= [InventoryFilter]
     list_per_page = 10
@@ -33,3 +34,14 @@ class ProductAdmin(admin.ModelAdmin):
             return 'High'
         else:
             return 'Ok'
+        
+    
+    
+    # @admin.action(description='Clear Inventory')    
+    # def inventory_action(self, request, queryset):
+    #     update_count = queryset.update(inventory=0)
+    #     self.message_user(
+    #         request,
+    #         f'{update_count} products were sucessfully updated.',
+    #         messages.ERROR
+    #     )
