@@ -69,8 +69,18 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = ['title','featured_product']
     search_fields = ['title']
 
+# class OrderItemInline(admin.StackedInline):
+class OrderItemInline(admin.TabularInline):
+    model = models.OrderItem
+    extra = 0
+    min_num =1
+    max_num = 10
+    autocomplete_fields = ['product']
+
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer']
     list_display = ['placed_at','payment_status','customer']
     list_per_page= 15
+    inlines =[OrderItemInline]
