@@ -51,7 +51,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['customer']
-    list_display =['phone','membership']
+    list_display =['first_name','last_name','phone','membership']
     list_per_page = 10
     actions = ['membership_action']
 
