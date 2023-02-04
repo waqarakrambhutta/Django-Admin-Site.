@@ -1,7 +1,5 @@
 from django.contrib import admin,messages
-from tags.models import TaggedItem
 from . import models
-from django.contrib.contenttypes.admin import GenericTabularInline
 
 class InventoryFilter(admin.SimpleListFilter):
     title = 'Inventory'
@@ -21,9 +19,7 @@ class InventoryFilter(admin.SimpleListFilter):
             return queryset.filter(inventory__range=(11,49))  
 
 
-class TagInline(GenericTabularInline):
-    model = TaggedItem
-    autocomplete_fields = ['tag']
+
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -32,7 +28,6 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['title','inventory','Inventory_status']
     list_filter= [InventoryFilter]
     list_per_page = 10
-    inlines = [TagInline]
     search_fields = ['inventory__contains']
 
     def Inventory_status(self,separate):
