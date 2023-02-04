@@ -1,5 +1,4 @@
 from django.contrib import admin,messages
-
 from tags.models import TaggedItem
 from . import models
 from django.contrib.contenttypes.admin import GenericTabularInline
